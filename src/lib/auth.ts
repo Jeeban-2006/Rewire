@@ -5,7 +5,8 @@ import React, { createContext, useContext, useState, useEffect, ReactNode } from
 
 interface AuthContextType {
   isAuthenticated: boolean;
-  login: (password: string) => boolean;
+  user: { email: string | null; name: string } | null;
+  login: (email: string, password: string) => boolean;
   logout: () => void;
   signup: (email: string, password: string) => boolean;
 }
@@ -14,20 +15,25 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState<{ email: string | null; name: string } | null>(null);
 
   useEffect(() => {
     const authStatus = localStorage.getItem('isAuthenticated');
+    const userEmail = localStorage.getItem('userEmail');
     if (authStatus === 'true') {
       setIsAuthenticated(true);
+      setUser({ email: userEmail, name: 'Cody Neat' });
     }
   }, []);
   
 
-  const login = (password: string) => {
+  const login = (email: string, password: string) => {
     // Mock login logic: any password works for demonstration
-    if (password) {
+    if (email && password) {
       setIsAuthenticated(true);
+      setUser({ email, name: 'Cody Neat' });
       localStorage.setItem('isAuthenticated', 'true');
+      localStorage.setItem('userEmail', email);
       return true;
     }
     return false;
@@ -37,7 +43,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // Mock signup logic
     if (email && password) {
       setIsAuthenticated(true);
+      setUser({ email, name: 'Cody Neat' });
       localStorage.setItem('isAuthenticated', 'true');
+      localStorage.setItem('userEmail', email);
       return true;
     }
     return false;
@@ -45,10 +53,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const logout = () => {
     setIsAuthenticated(false);
+    setUser(null);
     localStorage.removeItem('isAuthenticated');
+    localStorage.removeItem('userEmail');
   };
 
-  return React.createElement(AuthContext.Provider, { value: { isAuthenticated, login, logout, signup } }, children);
+  return React.createElement(AuthContext.Provider, { value: { isAuthenticated, user, login, logout, signup } }, children);
 }
 
 export function useAuth() {

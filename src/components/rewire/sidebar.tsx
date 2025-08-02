@@ -35,7 +35,7 @@ interface SidebarProps {
 }
 
 export function Sidebar({ view, setView, onAddTask, onSettingsClick }: SidebarProps) {
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
   const router = useRouter();
 
   const handleLogout = () => {
@@ -92,18 +92,20 @@ export function Sidebar({ view, setView, onAddTask, onSettingsClick }: SidebarPr
           <LogOut className="mr-2 h-4 w-4" />
           Logout
         </Button>
-        <div className="flex items-center gap-3 p-2">
-          <Avatar className="h-9 w-9">
-            <AvatarImage src="https://placehold.co/100x100.png" alt="@shadcn" data-ai-hint="person" />
-            <AvatarFallback>CN</AvatarFallback>
-          </Avatar>
-          <div>
-            <p className="text-sm font-medium leading-none">Cody Neat</p>
-            <p className="text-xs leading-none text-muted-foreground">
-              cody@rewire.com
-            </p>
+        {user && (
+          <div className="flex items-center gap-3 p-2">
+            <Avatar className="h-9 w-9">
+              <AvatarImage src="https://placehold.co/100x100.png" alt={user.name} data-ai-hint="person" />
+              <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
+            </Avatar>
+            <div>
+              <p className="text-sm font-medium leading-none">{user.name}</p>
+              <p className="text-xs leading-none text-muted-foreground">
+                {user.email}
+              </p>
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </aside>
   );

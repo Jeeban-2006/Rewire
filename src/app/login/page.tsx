@@ -13,7 +13,7 @@ import { Logo } from '@/components/rewire/logo';
 import { useToast } from '@/hooks/use-toast';
 
 export default function LoginPage() {
-  const [email, setEmail] = useState('m@example.com'); // Default or stored email
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const router = useRouter();
   const { login } = useAuth();
@@ -21,7 +21,7 @@ export default function LoginPage() {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    if (login(password)) {
+    if (login(email, password)) {
       router.push('/');
     } else {
       toast({
@@ -51,8 +51,6 @@ export default function LoginPage() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                readOnly 
-                className="text-muted-foreground"
               />
             </div>
             <div className="grid gap-2">
