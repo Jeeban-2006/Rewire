@@ -2,6 +2,7 @@ import type {Metadata} from 'next';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster"
 import { ThemeProvider } from '@/components/rewire/theme-provider';
+import { AuthProvider } from '@/lib/auth';
 
 export const metadata: Metadata = {
   title: 'Rewire',
@@ -27,7 +28,9 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+          <AuthProvider>
+            {children}
+          </AuthProvider>
           <Toaster />
         </ThemeProvider>
       </body>

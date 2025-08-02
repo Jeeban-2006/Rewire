@@ -1,5 +1,32 @@
+
+'use client';
+
 import { Dashboard } from '@/components/rewire/dashboard';
+import { AuthProvider, useAuth } from '@/lib/auth';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
+
+function ProtectedDashboard() {
+  const { isAuthenticated } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      router.push('/login');
+    }
+  }, [isAuthenticated, router]);
+
+  if (!isAuthenticated) {
+    return null; // or a loading spinner
+  }
+
+  return <Dashboard />;
+}
 
 export default function Home() {
-  return <Dashboard />;
+  return (
+    <AuthProvider>
+      <ProtectedDashboard />
+    </AuthProvider>
+  );
 }

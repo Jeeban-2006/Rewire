@@ -8,6 +8,7 @@ import {
   Users,
   Settings,
   PlusCircle,
+  LogOut,
 } from 'lucide-react';
 import { Logo } from '@/components/rewire/logo';
 import { Button } from '@/components/ui/button';
@@ -23,6 +24,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '../ui/tooltip';
+import { useAuth } from '@/lib/auth';
+import { useRouter } from 'next/navigation';
 
 interface SidebarProps {
   view: 'kanban' | 'list';
@@ -32,6 +35,14 @@ interface SidebarProps {
 }
 
 export function Sidebar({ view, setView, onAddTask, onSettingsClick }: SidebarProps) {
+  const { logout } = useAuth();
+  const router = useRouter();
+
+  const handleLogout = () => {
+    logout();
+    router.push('/login');
+  };
+
   return (
     <aside className="hidden md:flex flex-col w-64 bg-card border-r p-4 shrink-0">
       <Logo className="mb-6" />
@@ -76,6 +87,10 @@ export function Sidebar({ view, setView, onAddTask, onSettingsClick }: SidebarPr
         <Button variant="ghost" className="justify-start" onClick={onSettingsClick}>
           <Settings className="mr-2 h-4 w-4" />
           Settings
+        </Button>
+         <Button variant="ghost" className="justify-start" onClick={handleLogout}>
+          <LogOut className="mr-2 h-4 w-4" />
+          Logout
         </Button>
         <div className="flex items-center gap-3 p-2">
           <Avatar className="h-9 w-9">
