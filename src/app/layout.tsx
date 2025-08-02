@@ -1,8 +1,10 @@
+
 import type {Metadata} from 'next';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster"
 import { ThemeProvider } from '@/components/rewire/theme-provider';
 import { AuthProvider } from '@/lib/auth';
+import { AnimatedBackground } from '@/components/rewire/animated-background';
 
 export const metadata: Metadata = {
   title: 'Rewire',
@@ -29,7 +31,8 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <AuthProvider>
-            {children}
+            <AnimatedBackground />
+            <main>{children}</main>
           </AuthProvider>
           <Toaster />
         </ThemeProvider>

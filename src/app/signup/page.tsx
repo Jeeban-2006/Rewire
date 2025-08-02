@@ -34,7 +34,7 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-background to-accent/50">
+    <div className="flex items-center justify-center min-h-screen">
       <Card className="w-full max-w-sm bg-card/80 backdrop-blur-sm">
         <CardHeader className="text-center">
           <Logo className="mb-4 justify-center" />
@@ -76,18 +76,18 @@ export default function SignupPage() {
               />
             </div>
           </CardContent>
-          <CardFooter>
+          <CardFooter className="flex-col gap-4">
             <Button type="submit" className="w-full">
               Sign Up
             </Button>
+            <p className="text-center text-sm text-muted-foreground">
+              Already have an account?{' '}
+              <Link href="/login" className="underline underline-offset-4 hover:text-primary">
+                Log in
+              </Link>
+            </p>
           </CardFooter>
         </form>
-         <p className="mt-4 px-6 pb-6 text-center text-sm text-muted-foreground">
-            Already have an account?{' '}
-            <Link href="/login" className="underline underline-offset-4 hover:text-primary">
-              Log in
-            </Link>
-          </p>
       </Card>
     </div>
   );

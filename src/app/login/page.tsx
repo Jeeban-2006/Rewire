@@ -33,8 +33,8 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-background to-accent/50">
-      <Card className="w-full max-w-sm bg-card/80 backdrop-blur-sm">
+    <div className="flex items-center justify-center min-h-screen">
+      <Card className="w-full max-w-sm bg-card/80 backdrop-blur-sm border-border/50 shadow-2xl">
         <CardHeader className="text-center">
           <Logo className="mb-4 justify-center" />
           <CardTitle className="font-headline">Welcome Back</CardTitle>
@@ -64,18 +64,18 @@ export default function LoginPage() {
               />
             </div>
           </CardContent>
-          <CardFooter>
+          <CardFooter className="flex-col gap-4">
             <Button type="submit" className="w-full">
               Log In
             </Button>
+            <p className="text-center text-sm text-muted-foreground">
+              Don't have an account?{' '}
+              <Link href="/signup" className="underline underline-offset-4 hover:text-primary">
+                Sign up
+              </Link>
+            </p>
           </CardFooter>
         </form>
-         <p className="mt-4 px-6 pb-6 text-center text-sm text-muted-foreground">
-            Don&apos;t have an account?{' '}
-            <Link href="/signup" className="underline underline-offset-4 hover:text-primary">
-              Sign up
-            </Link>
-          </p>
       </Card>
     </div>
   );
