@@ -44,6 +44,7 @@ export function Dashboard() {
     };
     
     updateBg();
+    const intervalId = setInterval(updateBg, 60000); // Update every minute
 
     const observer = new MutationObserver(updateBg);
     observer.observe(document.documentElement, {
@@ -51,7 +52,10 @@ export function Dashboard() {
       attributeFilter: ['class'],
     });
 
-    return () => observer.disconnect();
+    return () => {
+      clearInterval(intervalId);
+      observer.disconnect();
+    };
   }, []);
 
   const handleAddTask = (newTaskData: Omit<Task, 'id' | 'status'>) => {
