@@ -1,3 +1,4 @@
+
 import type { Task, Goal, User, Badge } from '@/types';
 import { Rocket, Star, Trophy } from 'lucide-react';
 
@@ -11,6 +12,11 @@ export const mockUsers: User[] = [
   { id: 'user-1', name: 'Alex Doe', avatarUrl: 'https://placehold.co/100x100.png', initials: 'AD', points: 150, badges: [mockBadges[0]] },
   { id: 'user-2', name: 'Samira Khan', avatarUrl: 'https://placehold.co/100x100.png', initials: 'SK', points: 275, badges: [mockBadges[0]] },
   { id: 'user-3', name: 'John Smith', avatarUrl: 'https://placehold.co/100x100.png', initials: 'JS', points: 80, badges: [] },
+];
+
+export const mockGoals: Goal[] = [
+  { id: 'goal-1', title: 'Launch Q3 Project', description: 'Successfully launch the new project by the end of Q3.' },
+  { id: 'goal-2', title: 'Improve Personal Fitness', description: 'Exercise 3 times a week and eat healthier.' },
 ];
 
 const today = new Date();
