@@ -2,7 +2,7 @@
 'use client';
 
 import { Dashboard } from '@/components/rewire/dashboard';
-import { AuthProvider, useAuth } from '@/lib/auth';
+import { useAuth } from '@/lib/auth';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
@@ -25,8 +25,6 @@ function ProtectedDashboard() {
 
 export default function Home() {
   return (
-    <AuthProvider>
-      <ProtectedDashboard />
-    </AuthProvider>
+    <ProtectedDashboard />
   );
 }

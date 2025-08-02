@@ -13,7 +13,7 @@ import { Logo } from '@/components/rewire/logo';
 import { useToast } from '@/hooks/use-toast';
 
 export default function LoginPage() {
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState('m@example.com'); // Default or stored email
   const [password, setPassword] = useState('');
   const router = useRouter();
   const { login } = useAuth();
@@ -51,6 +51,8 @@ export default function LoginPage() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                readOnly 
+                className="text-muted-foreground"
               />
             </div>
             <div className="grid gap-2">
@@ -70,7 +72,7 @@ export default function LoginPage() {
             </Button>
           </CardFooter>
         </form>
-         <p className="mt-4 px-6 text-center text-sm text-muted-foreground">
+         <p className="mt-4 px-6 pb-6 text-center text-sm text-muted-foreground">
             Don&apos;t have an account?{' '}
             <Link href="/signup" className="underline underline-offset-4 hover:text-primary">
               Sign up
