@@ -29,11 +29,33 @@ export function Dashboard() {
   }, []);
 
   useEffect(() => {
-    const hour = new Date().getHours();
-    if (hour >= 5 && hour < 12) setBgClass('from-sky-200/50 to-amber-100/50');
-    else if (hour >= 12 && hour < 18) setBgClass('from-sky-300/50 to-blue-300/50');
-    else if (hour >= 18 && hour < 22) setBgClass('from-indigo-300/50 to-purple-400/50');
-    else setBgClass('from-slate-800/50 to-indigo-900/50');
+    // This effect is for the dynamic background, but since we are implementing
+    // a dark/light theme, we should make this conditional.
+    // For now, we'll respect the theme's background color by default.
+    const updateBg = () => {
+      const hour = new Date().getHours();
+      const isDark = document.documentElement.classList.contains('dark');
+      
+      if (isDark) {
+         setBgClass('from-slate-800/50 to-indigo-900/50');
+      } else {
+        if (hour >= 5 && hour < 12) setBgClass('from-sky-200/50 to-amber-100/50');
+        else if (hour >= 12 && hour < 18) setBgClass('from-sky-300/50 to-blue-300/50');
+        else if (hour >= 18 && hour < 22) setBgClass('from-indigo-300/50 to-purple-400/50');
+        else setBgClass('from-slate-800/50 to-indigo-900/50');
+      }
+    };
+    
+    updateBg();
+
+    // Observe changes to the 'class' attribute on the root element
+    const observer = new MutationObserver(updateBg);
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class'],
+    });
+
+    return () => observer.disconnect();
   }, []);
 
   const handleAddTask = (newTaskData: Omit<Task, 'id' | 'status'>) => {

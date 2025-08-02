@@ -1,6 +1,7 @@
 
 'use client';
 
+import { useTheme } from 'next-themes';
 import {
   Dialog,
   DialogContent,
@@ -13,6 +14,7 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Save } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 interface SettingsDialogProps {
   open: boolean;
@@ -20,26 +22,46 @@ interface SettingsDialogProps {
 }
 
 export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
-  
-  const handleSubmit = (e: React.FormEvent) => {
+  const { theme, setTheme, systemTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  const [selectedTheme, setSelectedTheme] = useState(theme);
+
+  useEffect(() => {
+    setMounted(true);
+    setSelectedTheme(theme);
+  }, [theme, open]);
+
+  const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
+    if (selectedTheme) {
+      setTheme(selectedTheme);
+    }
     onOpenChange(false);
   };
-
+  
+  if (!mounted) {
+    // Avoids hydration mismatch
+    return null;
+  }
+  
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[480px]">
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSave}>
           <DialogHeader>
             <DialogTitle className="font-headline">Settings</DialogTitle>
             <DialogDescription>
-              Customize your experience. Changes will be saved automatically.
+              Customize your experience.
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-6 py-4">
             <div className="grid gap-3">
               <Label className="font-semibold">Theme</Label>
-              <RadioGroup defaultValue="system" className="flex gap-4">
+              <RadioGroup 
+                value={selectedTheme} 
+                onValueChange={setSelectedTheme}
+                className="flex gap-4"
+              >
                 <div>
                   <RadioGroupItem value="light" id="light" className="peer sr-only" />
                   <Label
@@ -71,6 +93,7 @@ export function SettingsDialog({ open, onOpenChange }: SettingsDialogProps) {
             </div>
           </div>
           <DialogFooter>
+            <Button type="button" variant="ghost" onClick={() => onOpenChange(false)}>Cancel</Button>
             <Button type="submit">
               <Save className="mr-2 h-4 w-4" />
               Save
