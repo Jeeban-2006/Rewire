@@ -13,6 +13,7 @@ import { AddTaskDialog } from './add-task-dialog';
 import { EditTaskDialog } from './edit-task-dialog';
 import { SettingsDialog } from './settings-dialog';
 import { useToast } from '@/hooks/use-toast';
+import { DropResult } from 'react-beautiful-dnd';
 
 export function Dashboard() {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -154,6 +155,23 @@ export function Dashboard() {
       );
     }
   };
+  
+  const handleDragEnd = (result: DropResult) => {
+    const { destination, source, draggableId } = result;
+
+    if (!destination) {
+      return;
+    }
+
+    if (
+      destination.droppableId === source.droppableId &&
+      destination.index === source.index
+    ) {
+      return;
+    }
+
+    handleMoveTask(draggableId, destination.droppableId as KanbanColumnId);
+  };
 
   const openEditDialog = (task: Task) => {
     setEditingTask(task);
@@ -266,6 +284,7 @@ export function Dashboard() {
               onEditTask={openEditDialog}
               onDeleteTask={handleDeleteTask}
               onMoveTask={handleMoveTask}
+              onDragEnd={handleDragEnd}
             />
           ) : (
             <TaskList
