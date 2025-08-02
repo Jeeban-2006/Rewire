@@ -1,4 +1,5 @@
-import type { Task, User } from '@/types';
+
+import type { Task, User, KanbanColumnId } from '@/types';
 import {
   Card,
   CardContent,
@@ -9,17 +10,24 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { mockUsers } from '@/lib/mock-data';
-import { MoreVertical, GripVertical, Target } from 'lucide-react';
+import { MoreVertical, GripVertical, Target, ArrowRight } from 'lucide-react';
 import { Button } from '../ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  DropdownMenuSub,
+  DropdownMenuSubTrigger,
+  DropdownMenuSubContent,
+  DropdownMenuPortal,
 } from '../ui/dropdown-menu';
 
 interface TaskCardProps {
   task: Task;
+  onEdit: (task: Task) => void;
+  onDelete: (taskId: string) => void;
+  onMove?: (taskId: string, newStatus: KanbanColumnId) => void;
 }
 
 const priorityMap = {
@@ -28,9 +36,25 @@ const priorityMap = {
   low: 'outline',
 } as const;
 
-export function TaskCard({ task }: TaskCardProps) {
+export function TaskCard({ task, onEdit, onDelete, onMove }: TaskCardProps) {
   const assignees =
     task.assigneeIds?.map((id) => mockUsers.find((u) => u.id === id)).filter(Boolean) as User[] | undefined;
+
+  const handleEdit = () => {
+    onEdit(task);
+  };
+
+  const handleDelete = () => {
+    onDelete(task.id);
+  };
+  
+  const handleMove = (newStatus: KanbanColumnId) => {
+    if (onMove) {
+      onMove(task.id, newStatus);
+    }
+  };
+
+  const availableStatuses: KanbanColumnId[] = ['todo', 'inprogress', 'done'];
 
   return (
     <Card className="mb-4 group bg-card/80 backdrop-blur-sm hover:bg-card/90 transition-all shadow-sm hover:shadow-md">
@@ -53,9 +77,34 @@ export function TaskCard({ task }: TaskCardProps) {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem>Edit</DropdownMenuItem>
-            <DropdownMenuItem>Delegate</DropdownMenuItem>
-            <DropdownMenuItem>Delete</DropdownMenuItem>
+            <DropdownMenuItem onClick={handleEdit}>Edit</DropdownMenuItem>
+             {onMove && (
+              <DropdownMenuSub>
+                <DropdownMenuSubTrigger>
+                  <span>Move to</span>
+                </DropdownMenuSubTrigger>
+                <DropdownMenuPortal>
+                  <DropdownMenuSubContent>
+                    {availableStatuses
+                      .filter((status) => status !== task.status)
+                      .map((status) => (
+                        <DropdownMenuItem
+                          key={status}
+                          onClick={() => handleMove(status)}
+                        >
+                          <ArrowRight className="mr-2 h-4 w-4" />
+                          {status === 'todo' && 'To Do'}
+                          {status === 'inprogress' && 'In Progress'}
+                          {status === 'done' && 'Done'}
+                        </DropdownMenuItem>
+                      ))}
+                  </DropdownMenuSubContent>
+                </DropdownMenuPortal>
+              </DropdownMenuSub>
+            )}
+            <DropdownMenuItem onClick={handleDelete} className="text-destructive">
+              Delete
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </CardHeader>

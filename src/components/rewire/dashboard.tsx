@@ -9,12 +9,22 @@ import { Header } from './header';
 import { KanbanBoard } from './kanban-board';
 import { TaskList } from './task-list';
 import { AddTaskDialog } from './add-task-dialog';
+import { EditTaskDialog } from './edit-task-dialog';
 
 export function Dashboard() {
-  const [tasks, setTasks] = useState<Task[]>(mockTasks);
+  const [tasks, setTasks] = useState<Task[]>([]);
   const [view, setView] = useState<'kanban' | 'list'>('kanban');
   const [bgClass, setBgClass] = useState('');
-  const [isDialogOpen, setDialogOpen] = useState(false);
+  const [isAddDialogOpen, setAddDialogOpen] = useState(false);
+  const [isEditDialogOpen, setEditDialogOpen] = useState(false);
+  const [editingTask, setEditingTask] = useState<Task | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  useEffect(() => {
+    // In a real app, you'd fetch this data.
+    // For now, we'll deep copy mockTasks to avoid mutation issues.
+    setTasks(JSON.parse(JSON.stringify(mockTasks)));
+  }, []);
 
   useEffect(() => {
     const hour = new Date().getHours();
@@ -31,7 +41,42 @@ export function Dashboard() {
       status: 'todo',
     };
     setTasks(prevTasks => [newTask, ...prevTasks]);
+    setAddDialogOpen(false);
   };
+
+  const handleUpdateTask = (updatedTask: Task) => {
+    setTasks(prevTasks =>
+      prevTasks.map(task => (task.id === updatedTask.id ? updatedTask : task))
+    );
+    setEditDialogOpen(false);
+    setEditingTask(null);
+  };
+
+  const handleDeleteTask = (taskId: string) => {
+    setTasks(prevTasks => prevTasks.filter(task => task.id !== taskId));
+  };
+  
+  const handleMoveTask = (taskId: string, newStatus: KanbanColumnId) => {
+    setTasks(prevTasks =>
+      prevTasks.map(task =>
+        task.id === taskId ? { ...task, status: newStatus } : task
+      )
+    );
+  };
+
+  const openEditDialog = (task: Task) => {
+    setEditingTask(task);
+    setEditDialogOpen(true);
+  };
+
+  const filteredTasks = useMemo(() => {
+    if (!searchQuery) return tasks;
+    return tasks.filter(task =>
+      task.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      task.description?.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  }, [tasks, searchQuery]);
+
 
   const columns = useMemo<KanbanColumn[]>(() => {
     const statuses: KanbanColumnId[] = ['todo', 'inprogress', 'done'];
@@ -41,26 +86,52 @@ export function Dashboard() {
       done: { id: 'done', title: 'Done', tasks: [] },
     };
 
-    tasks.forEach((task) => {
+    filteredTasks.forEach((task) => {
       if (columnMap[task.status as KanbanColumnId]) {
         columnMap[task.status as KanbanColumnId].tasks.push(task);
       }
     });
     
     return statuses.map(id => columnMap[id]);
-  }, [tasks]);
+  }, [filteredTasks]);
 
   return (
     <div className={`flex h-screen bg-gradient-to-br transition-colors duration-1000 ${bgClass}`}>
-      <Sidebar view={view} setView={setView} onAddTask={() => setDialogOpen(true)} />
+      <Sidebar view={view} setView={setView} onAddTask={() => setAddDialogOpen(true)} />
       <main className="flex-1 flex flex-col overflow-hidden">
-        <Header />
+        <Header searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
         
         <div className="flex-1 overflow-y-auto">
-          {view === 'kanban' ? <KanbanBoard columns={columns} /> : <TaskList tasks={tasks} />}
+          {view === 'kanban' ? (
+            <KanbanBoard
+              columns={columns}
+              onEditTask={openEditDialog}
+              onDeleteTask={handleDeleteTask}
+              onMoveTask={handleMoveTask}
+            />
+          ) : (
+            <TaskList
+              tasks={filteredTasks}
+              onEditTask={openEditDialog}
+              onDeleteTask={handleDeleteTask}
+            />
+          )}
         </div>
       </main>
-      <AddTaskDialog open={isDialogOpen} onOpenChange={setDialogOpen} onAddTask={handleAddTask} />
+      <AddTaskDialog
+        open={isAddDialogOpen}
+        onOpenChange={setAddDialogOpen}
+        onAddTask={handleAddTask}
+      />
+       {editingTask && (
+        <EditTaskDialog
+          key={editingTask.id}
+          open={isEditDialogOpen}
+          onOpenChange={setEditDialogOpen}
+          task={editingTask}
+          onUpdateTask={handleUpdateTask}
+        />
+      )}
     </div>
   );
 }

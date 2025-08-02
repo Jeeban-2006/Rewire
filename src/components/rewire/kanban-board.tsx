@@ -1,11 +1,15 @@
-import type { KanbanColumn } from '@/types';
+
+import type { KanbanColumn, KanbanColumnId, Task } from '@/types';
 import { TaskCard } from './task-card';
 
 interface KanbanBoardProps {
   columns: KanbanColumn[];
+  onEditTask: (task: Task) => void;
+  onDeleteTask: (taskId: string) => void;
+  onMoveTask: (taskId: string, newStatus: KanbanColumnId) => void;
 }
 
-export function KanbanBoard({ columns }: KanbanBoardProps) {
+export function KanbanBoard({ columns, onEditTask, onDeleteTask, onMoveTask }: KanbanBoardProps) {
   return (
     <div className="flex gap-6 p-4 lg:p-6 h-full overflow-x-auto">
       {columns.map((column) => (
@@ -23,7 +27,13 @@ export function KanbanBoard({ columns }: KanbanBoardProps) {
           </div>
           <div className="h-full rounded-lg">
             {column.tasks.map((task) => (
-              <TaskCard key={task.id} task={task} />
+              <TaskCard
+                key={task.id}
+                task={task}
+                onEdit={onEditTask}
+                onDelete={onDeleteTask}
+                onMove={onMoveTask}
+              />
             ))}
           </div>
         </div>
