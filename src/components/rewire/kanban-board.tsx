@@ -12,8 +12,8 @@ interface KanbanBoardProps {
   onDragEnd: (result: DropResult) => void;
 }
 
-// StrictMode-compliant Droppable component
-const StrictModeDroppable = ({ children, ...props }: any) => {
+export function KanbanBoard({ columns, onEditTask, onDeleteTask, onMoveTask, onDragEnd }: KanbanBoardProps) {
+  // StrictMode-compliant drag and drop fix
   const [enabled, setEnabled] = useState(false);
   useEffect(() => {
     const animation = requestAnimationFrame(() => setEnabled(true));
@@ -22,19 +22,17 @@ const StrictModeDroppable = ({ children, ...props }: any) => {
       setEnabled(false);
     };
   }, []);
+
   if (!enabled) {
     return null;
   }
-  return <Droppable {...props}>{children}</Droppable>;
-};
+  // End of fix
 
-
-export function KanbanBoard({ columns, onEditTask, onDeleteTask, onMoveTask, onDragEnd }: KanbanBoardProps) {
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <div className="flex gap-6 p-4 lg:p-6 h-full overflow-x-auto">
         {columns.map((column) => (
-          <StrictModeDroppable key={column.id} droppableId={column.id}>
+          <Droppable key={column.id} droppableId={column.id}>
             {(provided, snapshot) => (
               <div
                 ref={provided.innerRef}
@@ -73,7 +71,7 @@ export function KanbanBoard({ columns, onEditTask, onDeleteTask, onMoveTask, onD
                 </div>
               </div>
             )}
-          </StrictModeDroppable>
+          </Droppable>
         ))}
       </div>
     </DragDropContext>
