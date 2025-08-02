@@ -3,21 +3,23 @@
 
 import { useState } from 'react';
 import { format } from 'date-fns';
-import { Search, Calendar as CalendarIcon } from 'lucide-react';
+import { Search, Calendar as CalendarIcon, Flame } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
 import { cn } from '@/lib/utils';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../ui/tooltip';
 
 interface HeaderProps {
   searchQuery: string;
   setSearchQuery: (query: string) => void;
   selectedDate: Date | undefined;
   setSelectedDate: (date: Date | undefined) => void;
+  streak: number;
 }
 
-export function Header({ searchQuery, setSearchQuery, selectedDate, setSelectedDate }: HeaderProps) {
+export function Header({ searchQuery, setSearchQuery, selectedDate, setSelectedDate, streak }: HeaderProps) {
   
   const handleTodayClick = () => {
     setSelectedDate(new Date());
@@ -37,6 +39,21 @@ export function Header({ searchQuery, setSearchQuery, selectedDate, setSelectedD
         </div>
       </div>
       <div className="flex items-center gap-4">
+        {streak > 0 && (
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div className="flex items-center gap-1 font-semibold text-amber-500">
+                  <Flame className="h-5 w-5" />
+                  <span>{streak}</span>
+                </div>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>You have a {streak}-day streak! Keep it up!</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        )}
         <Button variant="outline" onClick={handleTodayClick}>
           Today
         </Button>

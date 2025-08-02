@@ -34,6 +34,7 @@ export function EditTaskDialog({ open, onOpenChange, task, onUpdateTask }: EditT
   const [description, setDescription] = useState('');
   const [dueDate, setDueDate] = useState<Date | undefined>();
   const [priority, setPriority] = useState<Task['priority']>();
+  const [status, setStatus] = useState<Task['status']>();
 
   useEffect(() => {
     if (task) {
@@ -41,6 +42,7 @@ export function EditTaskDialog({ open, onOpenChange, task, onUpdateTask }: EditT
       setDescription(task.description || '');
       setDueDate(task.dueDate ? new Date(task.dueDate) : undefined);
       setPriority(task.priority);
+      setStatus(task.status);
     }
   }, [task]);
 
@@ -53,6 +55,7 @@ export function EditTaskDialog({ open, onOpenChange, task, onUpdateTask }: EditT
       title,
       description,
       priority,
+      status: status || task.status,
       dueDate: dueDate?.toISOString(),
     });
     
@@ -116,7 +119,7 @@ export function EditTaskDialog({ open, onOpenChange, task, onUpdateTask }: EditT
                 </Popover>
               </div>
                <div className="grid gap-2">
-                <Label htmlFor="priority">Priority (optional)</Label>
+                <Label htmlFor="priority">Priority</Label>
                  <Select value={priority} onValueChange={(value: Task['priority']) => setPriority(value)}>
                   <SelectTrigger id="priority">
                     <SelectValue placeholder="Select priority" />
@@ -129,6 +132,19 @@ export function EditTaskDialog({ open, onOpenChange, task, onUpdateTask }: EditT
                 </Select>
               </div>
             </div>
+             <div className="grid gap-2">
+                <Label htmlFor="status">Status</Label>
+                 <Select value={status} onValueChange={(value: Task['status']) => setStatus(value)}>
+                  <SelectTrigger id="status">
+                    <SelectValue placeholder="Select status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="todo">To Do</SelectItem>
+                    <SelectItem value="inprogress">In Progress</SelectItem>
+                    <SelectItem value="done">Done</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
           </div>
           <DialogFooter>
             <Button type="submit">

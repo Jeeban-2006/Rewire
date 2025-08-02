@@ -1,14 +1,16 @@
-import type { Task, Goal, User } from '@/types';
+import type { Task, Goal, User, Badge } from '@/types';
+import { Rocket, Star, Trophy } from 'lucide-react';
 
-export const mockUsers: User[] = [
-  { id: 'user-1', name: 'Alex Doe', avatarUrl: 'https://placehold.co/100x100.png', initials: 'AD' },
-  { id: 'user-2', name: 'Samira Khan', avatarUrl: 'https://placehold.co/100x100.png', initials: 'SK' },
-  { id: 'user-3', name: 'John Smith', avatarUrl: 'https://placehold.co/100x100.png', initials: 'JS' },
+export const mockBadges: Badge[] = [
+  { id: 'badge-1', name: 'First Steps', description: 'Completed your first task.', icon: Star },
+  { id: 'badge-2', name: 'Task Master', description: 'Completed 5 tasks.', icon: Trophy },
+  { id: 'badge-3', name: 'Productivity Pro', description: 'Completed 10 tasks.', icon: Rocket },
 ];
 
-export const mockGoals: Goal[] = [
-  { id: 'goal-1', title: 'Launch Side Project', description: 'Complete and launch the new productivity app by end of Q3.' },
-  { id: 'goal-2', title: 'Health & Fitness', description: 'Run a half-marathon and improve overall physical health.' },
+export const mockUsers: User[] = [
+  { id: 'user-1', name: 'Alex Doe', avatarUrl: 'https://placehold.co/100x100.png', initials: 'AD', points: 150, badges: [mockBadges[0]] },
+  { id: 'user-2', name: 'Samira Khan', avatarUrl: 'https://placehold.co/100x100.png', initials: 'SK', points: 275, badges: [mockBadges[0]] },
+  { id: 'user-3', name: 'John Smith', avatarUrl: 'https://placehold.co/100x100.png', initials: 'JS', points: 80, badges: [] },
 ];
 
 const today = new Date();
@@ -59,6 +61,7 @@ export const mockTasks: Task[] = [
     priority: 'medium',
     goalId: 'goal-2',
     dueDate: new Date(new Date().setDate(today.getDate() - 2)).toISOString(),
+    completedAt: new Date(new Date().setDate(today.getDate() - 2)).toISOString(),
   },
   {
     id: 'task-6',
@@ -66,6 +69,7 @@ export const mockTasks: Task[] = [
     description: 'Review with finance team and submit for approval.',
     status: 'done',
     assigneeIds: ['user-3'],
+    completedAt: new Date(new Date().setDate(today.getDate() - 1)).toISOString(),
   },
   {
     id: 'task-7',

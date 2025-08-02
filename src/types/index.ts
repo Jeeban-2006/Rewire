@@ -7,6 +7,7 @@ export type Task = {
   dueDate?: string;
   goalId?: string;
   assigneeIds?: string[];
+  completedAt?: string;
 };
 
 export type Goal = {
@@ -15,11 +16,20 @@ export type Goal = {
   description: string;
 };
 
+export type Badge = {
+  id: string;
+  name: string;
+  description: string;
+  icon: React.ComponentType<{ className?: string }>;
+};
+
 export type User = {
   id: string;
   name: string;
   avatarUrl: string;
   initials: string;
+  points: number;
+  badges: Badge[];
 };
 
 export type KanbanColumnId = 'todo' | 'inprogress' | 'done';
