@@ -11,6 +11,13 @@ export const mockGoals: Goal[] = [
   { id: 'goal-2', title: 'Health & Fitness', description: 'Run a half-marathon and improve overall physical health.' },
 ];
 
+const today = new Date();
+const tomorrow = new Date(today);
+tomorrow.setDate(tomorrow.getDate() + 1);
+const nextWeek = new Date(today);
+nextWeek.setDate(nextWeek.getDate() + 7);
+
+
 export const mockTasks: Task[] = [
   {
     id: 'task-1',
@@ -19,6 +26,7 @@ export const mockTasks: Task[] = [
     priority: 'high',
     goalId: 'goal-1',
     assigneeIds: ['user-1'],
+    dueDate: today.toISOString(),
   },
   {
     id: 'task-2',
@@ -28,6 +36,7 @@ export const mockTasks: Task[] = [
     priority: 'high',
     goalId: 'goal-1',
     assigneeIds: ['user-2', 'user-1'],
+    dueDate: tomorrow.toISOString(),
   },
   {
     id: 'task-3',
@@ -35,6 +44,7 @@ export const mockTasks: Task[] = [
     status: 'todo',
     priority: 'medium',
     goalId: 'goal-1',
+     dueDate: nextWeek.toISOString(),
   },
   {
     id: 'task-4',
@@ -48,6 +58,7 @@ export const mockTasks: Task[] = [
     status: 'done',
     priority: 'medium',
     goalId: 'goal-2',
+    dueDate: new Date(new Date().setDate(today.getDate() - 2)).toISOString(),
   },
   {
     id: 'task-6',
@@ -62,6 +73,7 @@ export const mockTasks: Task[] = [
     status: 'todo',
     priority: 'medium',
     assigneeIds: ['user-2'],
+    dueDate: new Date(new Date().setDate(today.getDate() + 14)).toISOString(),
   },
     {
     id: 'task-8',
@@ -69,5 +81,6 @@ export const mockTasks: Task[] = [
     status: 'todo',
     priority: 'low',
     goalId: 'goal-2',
+    dueDate: today.toISOString(),
   },
 ];

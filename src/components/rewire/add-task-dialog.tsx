@@ -2,6 +2,7 @@
 'use client';
 
 import { useState } from 'react';
+import { format } from 'date-fns';
 import {
   Dialog,
   DialogContent,
@@ -14,8 +15,11 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import { Plus } from 'lucide-react';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Calendar } from '@/components/ui/calendar';
+import { Plus, Calendar as CalendarIcon } from 'lucide-react';
 import type { Task } from '@/types';
+import { cn } from '@/lib/utils';
 
 interface AddTaskDialogProps {
   open: boolean;
@@ -26,6 +30,7 @@ interface AddTaskDialogProps {
 export function AddTaskDialog({ open, onOpenChange, onAddTask }: AddTaskDialogProps) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [dueDate, setDueDate] = useState<Date | undefined>();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,10 +39,12 @@ export function AddTaskDialog({ open, onOpenChange, onAddTask }: AddTaskDialogPr
     onAddTask({
       title,
       description,
+      dueDate: dueDate?.toISOString(),
     });
     
     setTitle('');
     setDescription('');
+    setDueDate(undefined);
     onOpenChange(false);
   };
 
@@ -70,6 +77,31 @@ export function AddTaskDialog({ open, onOpenChange, onAddTask }: AddTaskDialogPr
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
               />
+            </div>
+             <div className="grid gap-2">
+              <Label htmlFor="dueDate">Due Date (optional)</Label>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant={"outline"}
+                    className={cn(
+                      "justify-start text-left font-normal",
+                      !dueDate && "text-muted-foreground"
+                    )}
+                  >
+                    <CalendarIcon className="mr-2 h-4 w-4" />
+                    {dueDate ? format(dueDate, "PPP") : <span>Pick a date</span>}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={dueDate}
+                    onSelect={setDueDate}
+                    initialFocus
+                  />
+                </PopoverContent>
+              </Popover>
             </div>
           </div>
           <DialogFooter>

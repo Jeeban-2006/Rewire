@@ -2,6 +2,7 @@
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
+import { isSameDay } from 'date-fns';
 import type { Task, KanbanColumn, KanbanColumnId } from '@/types';
 import { mockTasks } from '@/lib/mock-data';
 import { Sidebar } from './sidebar';
@@ -21,17 +22,13 @@ export function Dashboard() {
   const [isSettingsDialogOpen, setSettingsDialogOpen] = useState(false);
   const [editingTask, setEditingTask] = useState<Task | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>();
 
   useEffect(() => {
-    // In a real app, you'd fetch this data.
-    // For now, we'll deep copy mockTasks to avoid mutation issues.
     setTasks(JSON.parse(JSON.stringify(mockTasks)));
   }, []);
 
   useEffect(() => {
-    // This effect is for the dynamic background, but since we are implementing
-    // a dark/light theme, we should make this conditional.
-    // For now, we'll respect the theme's background color by default.
     const updateBg = () => {
       const hour = new Date().getHours();
       const isDark = document.documentElement.classList.contains('dark');
@@ -48,7 +45,6 @@ export function Dashboard() {
     
     updateBg();
 
-    // Observe changes to the 'class' attribute on the root element
     const observer = new MutationObserver(updateBg);
     observer.observe(document.documentElement, {
       attributes: true,
@@ -94,12 +90,23 @@ export function Dashboard() {
   };
 
   const filteredTasks = useMemo(() => {
-    if (!searchQuery) return tasks;
-    return tasks.filter(task =>
-      task.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      task.description?.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-  }, [tasks, searchQuery]);
+    let filtered = tasks;
+
+    if (searchQuery) {
+      filtered = filtered.filter(task =>
+        task.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        task.description?.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
+
+    if (selectedDate) {
+      filtered = filtered.filter(task => 
+        task.dueDate && isSameDay(new Date(task.dueDate), selectedDate)
+      );
+    }
+    
+    return filtered;
+  }, [tasks, searchQuery, selectedDate]);
 
 
   const columns = useMemo<KanbanColumn[]>(() => {
@@ -128,7 +135,12 @@ export function Dashboard() {
         onSettingsClick={() => setSettingsDialogOpen(true)}
       />
       <main className="flex-1 flex flex-col overflow-hidden">
-        <Header searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+        <Header 
+          searchQuery={searchQuery} 
+          setSearchQuery={setSearchQuery}
+          selectedDate={selectedDate}
+          setSelectedDate={setSelectedDate} 
+        />
         
         <div className="flex-1 overflow-y-auto">
           {view === 'kanban' ? (

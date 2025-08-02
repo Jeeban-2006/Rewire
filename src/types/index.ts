@@ -4,6 +4,7 @@ export type Task = {
   description?: string;
   status: 'todo' | 'inprogress' | 'done';
   priority?: 'low' | 'medium' | 'high';
+  dueDate?: string;
   goalId?: string;
   assigneeIds?: string[];
 };

@@ -9,11 +9,6 @@ interface TaskListProps {
 }
 
 export function TaskList({ tasks, onEditTask, onDeleteTask }: TaskListProps) {
-  const tasksByStatus: Record<string, Task[]> = {
-    'In Progress': tasks.filter(task => task.status === 'inprogress'),
-    'To Do': tasks.filder(task => task.status === 'todo'),
-    'Done': tasks.filter(task => task.status === 'done'),
-  };
 
   const statusOrder = ['In Progress', 'To Do', 'Done'];
 

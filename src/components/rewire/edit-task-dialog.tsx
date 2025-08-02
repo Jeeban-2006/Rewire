@@ -2,6 +2,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { format } from 'date-fns';
 import {
   Dialog,
   DialogContent,
@@ -14,8 +15,11 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import { Save } from 'lucide-react';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Calendar } from '@/components/ui/calendar';
+import { Save, Calendar as CalendarIcon } from 'lucide-react';
 import type { Task } from '@/types';
+import { cn } from '@/lib/utils';
 
 interface EditTaskDialogProps {
   open: boolean;
@@ -27,11 +31,13 @@ interface EditTaskDialogProps {
 export function EditTaskDialog({ open, onOpenChange, task, onUpdateTask }: EditTaskDialogProps) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [dueDate, setDueDate] = useState<Date | undefined>();
 
   useEffect(() => {
     if (task) {
       setTitle(task.title);
       setDescription(task.description || '');
+      setDueDate(task.dueDate ? new Date(task.dueDate) : undefined);
     }
   }, [task]);
 
@@ -43,6 +49,7 @@ export function EditTaskDialog({ open, onOpenChange, task, onUpdateTask }: EditT
       ...task,
       title,
       description,
+      dueDate: dueDate?.toISOString(),
     });
     
     onOpenChange(false);
@@ -77,6 +84,31 @@ export function EditTaskDialog({ open, onOpenChange, task, onUpdateTask }: EditT
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
               />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="dueDate">Due Date (optional)</Label>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant={"outline"}
+                    className={cn(
+                      "w-full justify-start text-left font-normal",
+                      !dueDate && "text-muted-foreground"
+                    )}
+                  >
+                    <CalendarIcon className="mr-2 h-4 w-4" />
+                    {dueDate ? format(dueDate, "PPP") : <span>Pick a date</span>}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={dueDate}
+                    onSelect={setDueDate}
+                    initialFocus
+                  />
+                </PopoverContent>
+              </Popover>
             </div>
           </div>
           <DialogFooter>

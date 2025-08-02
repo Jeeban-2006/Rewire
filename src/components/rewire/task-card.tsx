@@ -1,5 +1,6 @@
 
 import type { Task, User, KanbanColumnId } from '@/types';
+import { format } from 'date-fns';
 import {
   Card,
   CardContent,
@@ -10,7 +11,7 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { mockUsers } from '@/lib/mock-data';
-import { MoreVertical, GripVertical, Target, ArrowRight } from 'lucide-react';
+import { MoreVertical, GripVertical, Target, ArrowRight, Calendar } from 'lucide-react';
 import { Button } from '../ui/button';
 import {
   DropdownMenu,
@@ -108,8 +109,8 @@ export function TaskCard({ task, onEdit, onDelete, onMove }: TaskCardProps) {
           </DropdownMenuContent>
         </DropdownMenu>
       </CardHeader>
-      <CardContent className="p-4 pt-0 flex justify-between items-center">
-        <div className="flex items-center gap-2">
+      <CardContent className="p-4 pt-0 flex justify-between items-end">
+        <div className="flex items-center gap-2 flex-wrap">
           {task.priority && (
             <Badge variant={priorityMap[task.priority]}>
               {task.priority}
@@ -118,6 +119,12 @@ export function TaskCard({ task, onEdit, onDelete, onMove }: TaskCardProps) {
           {task.goalId && (
             <Badge variant="outline" className="flex items-center gap-1">
               <Target className="h-3 w-3" /> Goal
+            </Badge>
+          )}
+          {task.dueDate && (
+             <Badge variant="outline" className="flex items-center gap-1">
+              <Calendar className="h-3 w-3" />
+              {format(new Date(task.dueDate), "MMM d")}
             </Badge>
           )}
         </div>
