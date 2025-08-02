@@ -12,22 +12,22 @@ import { useAuth } from '@/lib/auth';
 import { Logo } from '@/components/rewire/logo';
 import { useToast } from '@/hooks/use-toast';
 
-export default function LoginPage() {
+export default function SignupPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const router = useRouter();
-  const { login } = useAuth();
+  const { signup } = useAuth();
   const { toast } = useToast();
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleSignup = (e: React.FormEvent) => {
     e.preventDefault();
-    if (login(password)) {
+    if (signup(email, password)) {
       router.push('/');
     } else {
       toast({
         variant: "destructive",
-        title: "Login Failed",
-        description: "Please check your credentials.",
+        title: "Signup Failed",
+        description: "An error occurred during signup.",
       });
     }
   };
@@ -37,10 +37,10 @@ export default function LoginPage() {
       <Card className="w-full max-w-sm">
         <CardHeader className="text-center">
           <Logo className="mb-4 justify-center" />
-          <CardTitle className="font-headline">Welcome Back</CardTitle>
-          <CardDescription>Enter your credentials to access your dashboard.</CardDescription>
+          <CardTitle className="font-headline">Create an Account</CardTitle>
+          <CardDescription>Enter your email and password to sign up.</CardDescription>
         </CardHeader>
-        <form onSubmit={handleLogin}>
+        <form onSubmit={handleSignup}>
           <CardContent className="grid gap-4">
             <div className="grid gap-2">
               <Label htmlFor="email">Email</Label>
@@ -66,14 +66,14 @@ export default function LoginPage() {
           </CardContent>
           <CardFooter>
             <Button type="submit" className="w-full">
-              Log In
+              Sign Up
             </Button>
           </CardFooter>
         </form>
          <p className="mt-4 px-6 text-center text-sm text-muted-foreground">
-            Don&apos;t have an account?{' '}
-            <Link href="/signup" className="underline underline-offset-4 hover:text-primary">
-              Sign up
+            Already have an account?{' '}
+            <Link href="/login" className="underline underline-offset-4 hover:text-primary">
+              Log in
             </Link>
           </p>
       </Card>

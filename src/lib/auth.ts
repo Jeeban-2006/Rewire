@@ -7,6 +7,7 @@ interface AuthContextType {
   isAuthenticated: boolean;
   login: (password: string) => boolean;
   logout: () => void;
+  signup: (email: string, password: string) => boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -32,12 +33,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return false;
   };
 
+  const signup = (email: string, password: string) => {
+    // Mock signup logic
+    if (email && password) {
+      setIsAuthenticated(true);
+      localStorage.setItem('isAuthenticated', 'true');
+      return true;
+    }
+    return false;
+  };
+
   const logout = () => {
     setIsAuthenticated(false);
     localStorage.removeItem('isAuthenticated');
   };
 
-  return React.createElement(AuthContext.Provider, { value: { isAuthenticated, login, logout } }, children);
+  return React.createElement(AuthContext.Provider, { value: { isAuthenticated, login, logout, signup } }, children);
 }
 
 export function useAuth() {
