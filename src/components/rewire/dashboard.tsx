@@ -10,6 +10,7 @@ import { KanbanBoard } from './kanban-board';
 import { TaskList } from './task-list';
 import { AddTaskDialog } from './add-task-dialog';
 import { EditTaskDialog } from './edit-task-dialog';
+import { SettingsDialog } from './settings-dialog';
 
 export function Dashboard() {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -17,6 +18,7 @@ export function Dashboard() {
   const [bgClass, setBgClass] = useState('');
   const [isAddDialogOpen, setAddDialogOpen] = useState(false);
   const [isEditDialogOpen, setEditDialogOpen] = useState(false);
+  const [isSettingsDialogOpen, setSettingsDialogOpen] = useState(false);
   const [editingTask, setEditingTask] = useState<Task | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -97,7 +99,12 @@ export function Dashboard() {
 
   return (
     <div className={`flex h-screen bg-gradient-to-br transition-colors duration-1000 ${bgClass}`}>
-      <Sidebar view={view} setView={setView} onAddTask={() => setAddDialogOpen(true)} />
+      <Sidebar 
+        view={view} 
+        setView={setView} 
+        onAddTask={() => setAddDialogOpen(true)}
+        onSettingsClick={() => setSettingsDialogOpen(true)}
+      />
       <main className="flex-1 flex flex-col overflow-hidden">
         <Header searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
         
@@ -132,6 +139,10 @@ export function Dashboard() {
           onUpdateTask={handleUpdateTask}
         />
       )}
+      <SettingsDialog
+        open={isSettingsDialogOpen}
+        onOpenChange={setSettingsDialogOpen}
+      />
     </div>
   );
 }

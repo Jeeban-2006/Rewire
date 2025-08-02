@@ -1,3 +1,4 @@
+
 'use client';
 
 import {
@@ -27,9 +28,10 @@ interface SidebarProps {
   view: 'kanban' | 'list';
   setView: (view: 'kanban' | 'list') => void;
   onAddTask: () => void;
+  onSettingsClick: () => void;
 }
 
-export function Sidebar({ view, setView, onAddTask }: SidebarProps) {
+export function Sidebar({ view, setView, onAddTask, onSettingsClick }: SidebarProps) {
   return (
     <aside className="hidden md:flex flex-col w-64 bg-card border-r p-4 shrink-0">
       <Logo className="mb-6" />
@@ -71,7 +73,7 @@ export function Sidebar({ view, setView, onAddTask }: SidebarProps) {
       <Separator className="my-4" />
 
       <div className="flex flex-col gap-2">
-        <Button variant="ghost" className="justify-start">
+        <Button variant="ghost" className="justify-start" onClick={onSettingsClick}>
           <Settings className="mr-2 h-4 w-4" />
           Settings
         </Button>
