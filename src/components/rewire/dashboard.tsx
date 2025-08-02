@@ -13,7 +13,7 @@ import { AddTaskDialog } from './add-task-dialog';
 import { EditTaskDialog } from './edit-task-dialog';
 import { SettingsDialog } from './settings-dialog';
 import { useToast } from '@/hooks/use-toast';
-import { DropResult } from 'react-beautiful-dnd';
+import type { DropResult } from 'react-beautiful-dnd';
 import { useAuth } from '@/lib/auth';
 
 export function Dashboard() {

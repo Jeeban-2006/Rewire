@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import type { KanbanColumn, KanbanColumnId, Task } from '@/types';
 import { TaskCard } from './task-card';
-import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
+import { DragDropContext, Droppable, Draggable, type DropResult } from 'react-beautiful-dnd';
 
 interface KanbanBoardProps {
   columns: KanbanColumn[];
