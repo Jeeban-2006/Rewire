@@ -164,21 +164,24 @@ function GamificationSection({ user }: { user: User | null }) {
            <h4 className="text-sm font-semibold">Badges</h4>
            <div className="flex items-center gap-2 flex-wrap">
               {user.badges.length > 0 ? (
-                user.badges.map(badge => (
-                  <TooltipProvider key={badge.id}>
-                    <Tooltip>
-                      <TooltipTrigger>
-                        <div className="p-2 rounded-full bg-accent hover:bg-primary/20">
-                           <badge.icon className="h-5 w-5 text-primary" />
-                        </div>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p className="font-bold">{badge.name}</p>
-                        <p>{badge.description}</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-                ))
+                user.badges.map(badge => {
+                  const Icon = badge.icon;
+                  return (
+                    <TooltipProvider key={badge.id}>
+                      <Tooltip>
+                        <TooltipTrigger>
+                          <div className="p-2 rounded-full bg-accent hover:bg-primary/20">
+                            <Icon className="h-5 w-5 text-primary" />
+                          </div>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p className="font-bold">{badge.name}</p>
+                          <p>{badge.description}</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  )
+                })
               ) : (
                 <p className="text-xs text-muted-foreground">No badges yet. Keep completing tasks!</p>
               )}
