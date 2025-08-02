@@ -42,6 +42,11 @@ export function Sidebar({ view, setView, onAddTask, onSettingsClick }: SidebarPr
     logout();
     router.push('/login');
   };
+  
+  const getInitials = (name: string | null | undefined) => {
+    if (!name) return 'U';
+    return name.split(' ').map(n => n[0]).join('');
+  }
 
   return (
     <aside className="hidden md:flex flex-col w-64 bg-card border-r p-4 shrink-0">
@@ -95,8 +100,8 @@ export function Sidebar({ view, setView, onAddTask, onSettingsClick }: SidebarPr
         {user && (
           <div className="flex items-center gap-3 p-2 mt-4 border-t pt-4">
             <Avatar className="h-9 w-9">
-              <AvatarImage src="https://placehold.co/100x100.png" alt={user.name} data-ai-hint="person" />
-              <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
+              <AvatarImage src="https://placehold.co/100x100.png" alt={user.name || ''} data-ai-hint="person" />
+              <AvatarFallback>{getInitials(user.name)}</AvatarFallback>
             </Avatar>
             <div>
               <p className="text-sm font-medium leading-none">{user.name}</p>

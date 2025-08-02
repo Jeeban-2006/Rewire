@@ -13,6 +13,7 @@ import { Logo } from '@/components/rewire/logo';
 import { useToast } from '@/hooks/use-toast';
 
 export default function SignupPage() {
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const router = useRouter();
@@ -21,7 +22,7 @@ export default function SignupPage() {
 
   const handleSignup = (e: React.FormEvent) => {
     e.preventDefault();
-    if (signup(email, password)) {
+    if (signup(name, email, password)) {
       router.push('/');
     } else {
       toast({
@@ -33,15 +34,26 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-background">
-      <Card className="w-full max-w-sm">
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-background to-accent/50">
+      <Card className="w-full max-w-sm bg-card/80 backdrop-blur-sm">
         <CardHeader className="text-center">
           <Logo className="mb-4 justify-center" />
           <CardTitle className="font-headline">Create an Account</CardTitle>
-          <CardDescription>Enter your email and password to sign up.</CardDescription>
+          <CardDescription>Enter your details to sign up.</CardDescription>
         </CardHeader>
         <form onSubmit={handleSignup}>
           <CardContent className="grid gap-4">
+             <div className="grid gap-2">
+              <Label htmlFor="name">Name</Label>
+              <Input
+                id="name"
+                type="text"
+                placeholder="Cody Neat"
+                required
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+            </div>
             <div className="grid gap-2">
               <Label htmlFor="email">Email</Label>
               <Input
