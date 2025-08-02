@@ -14,6 +14,7 @@ import { EditTaskDialog } from './edit-task-dialog';
 import { SettingsDialog } from './settings-dialog';
 import { useToast } from '@/hooks/use-toast';
 import { DropResult } from 'react-beautiful-dnd';
+import { useAuth } from '@/lib/auth';
 
 export function Dashboard() {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -27,6 +28,7 @@ export function Dashboard() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedDate, setSelectedDate] = useState<Date | undefined>();
   const [mainUser, setMainUser] = useState<User | null>(null);
+  const { user } = useAuth();
 
   const { toast } = useToast();
 
@@ -275,6 +277,7 @@ export function Dashboard() {
           selectedDate={selectedDate}
           setSelectedDate={setSelectedDate}
           streak={streak}
+          user={user}
         />
         
         <div className="flex-1 overflow-y-auto">

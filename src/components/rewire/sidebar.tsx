@@ -68,7 +68,7 @@ export function Sidebar({ view, setView, onAddTask, onSettingsClick, user: mainU
           onClick={() => setView('kanban')}
         >
           <LayoutGrid className="mr-2 h-4 w-4" />
-          Kanban Board
+          {user?.name ? `${user.name.split(' ')[0]}'s Dashboard` : 'Dashboard'}
         </Button>
         <Button
           variant={view === 'list' ? 'secondary' : 'ghost'}
