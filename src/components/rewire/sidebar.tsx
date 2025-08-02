@@ -15,7 +15,7 @@ import {
 import { Logo } from '@/components/rewire/logo';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { mockGoals, mockUsers } from '@/lib/mock-data';
+import { mockGoals, mockUsers, mockBadges } from '@/lib/mock-data';
 import type { Goal, User, Badge } from '@/types';
 import { Separator } from '@/components/ui/separator';
 import { Progress } from '@/components/ui/progress';
@@ -164,10 +164,13 @@ function GamificationSection({ user }: { user: User | null }) {
            <h4 className="text-sm font-semibold">Badges</h4>
            <div className="flex items-center gap-2 flex-wrap">
               {user.badges.length > 0 ? (
-                user.badges.map(badge => {
-                  const Icon = badge.icon;
+                user.badges.map(userBadge => {
+                  const badgeInfo = mockBadges.find(b => b.id === userBadge.id);
+                  if (!badgeInfo) return null;
+
+                  const Icon = badgeInfo.icon;
                   return (
-                    <TooltipProvider key={badge.id}>
+                    <TooltipProvider key={badgeInfo.id}>
                       <Tooltip>
                         <TooltipTrigger>
                           <div className="p-2 rounded-full bg-accent hover:bg-primary/20">
@@ -175,8 +178,8 @@ function GamificationSection({ user }: { user: User | null }) {
                           </div>
                         </TooltipTrigger>
                         <TooltipContent>
-                          <p className="font-bold">{badge.name}</p>
-                          <p>{badge.description}</p>
+                          <p className="font-bold">{badgeInfo.name}</p>
+                          <p>{badgeInfo.description}</p>
                         </TooltipContent>
                       </Tooltip>
                     </TooltipProvider>
