@@ -34,7 +34,7 @@ export default function LoginPage() {
 
   return (
     <div className="flex items-center justify-center min-h-screen">
-      <Card className="w-full max-w-sm bg-card/80 backdrop-blur-sm border-border/50 shadow-2xl">
+      <Card className="w-full max-w-sm bg-card/80 backdrop-blur-sm border-border/50 shadow-2xl animate-fade-in-up">
         <CardHeader className="text-center">
           <Logo className="mb-4 justify-center" />
           <CardTitle className="font-headline">Welcome Back</CardTitle>

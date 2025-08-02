@@ -58,7 +58,7 @@ export function TaskCard({ task, onEdit, onDelete, onMove }: TaskCardProps) {
   const availableStatuses: KanbanColumnId[] = ['todo', 'inprogress', 'done'];
 
   return (
-    <Card className="mb-4 group bg-card/80 backdrop-blur-sm hover:bg-card/90 transition-all shadow-sm hover:shadow-md">
+    <Card className="mb-4 group bg-card/80 backdrop-blur-sm hover:bg-card/90 transition-all shadow-sm hover:shadow-md animate-fade-in-up">
       <CardHeader className="p-4 flex flex-row items-start justify-between">
         <div className="space-y-1.5">
           <CardTitle className="text-base font-medium flex items-center">
