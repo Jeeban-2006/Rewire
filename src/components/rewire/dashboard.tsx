@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
@@ -23,6 +24,15 @@ export function Dashboard() {
     else setBgClass('from-slate-800/50 to-indigo-900/50');
   }, []);
 
+  const handleAddTask = (newTaskData: Omit<Task, 'id' | 'status'>) => {
+    const newTask: Task = {
+      ...newTaskData,
+      id: `task-${Date.now()}`,
+      status: 'todo',
+    };
+    setTasks(prevTasks => [newTask, ...prevTasks]);
+  };
+
   const columns = useMemo<KanbanColumn[]>(() => {
     const statuses: KanbanColumnId[] = ['todo', 'inprogress', 'done'];
     const columnMap: Record<KanbanColumnId, KanbanColumn> = {
@@ -32,7 +42,9 @@ export function Dashboard() {
     };
 
     tasks.forEach((task) => {
-      columnMap[task.status as KanbanColumnId].tasks.push(task);
+      if (columnMap[task.status as KanbanColumnId]) {
+        columnMap[task.status as KanbanColumnId].tasks.push(task);
+      }
     });
     
     return statuses.map(id => columnMap[id]);
@@ -45,10 +57,10 @@ export function Dashboard() {
         <Header />
         
         <div className="flex-1 overflow-y-auto">
-          {view === 'kanban' ? <KanbanBoard columns={columns} /> : <TaskList />}
+          {view === 'kanban' ? <KanbanBoard columns={columns} /> : <TaskList tasks={tasks} />}
         </div>
       </main>
-      <AddTaskDialog open={isDialogOpen} onOpenChange={setDialogOpen} />
+      <AddTaskDialog open={isDialogOpen} onOpenChange={setDialogOpen} onAddTask={handleAddTask} />
     </div>
   );
 }
