@@ -93,7 +93,7 @@ export function Sidebar({ view, setView, onAddTask, onSettingsClick }: SidebarPr
           Logout
         </Button>
         {user && (
-          <div className="flex items-center gap-3 p-2">
+          <div className="flex items-center gap-3 p-2 mt-4 border-t pt-4">
             <Avatar className="h-9 w-9">
               <AvatarImage src="https://placehold.co/100x100.png" alt={user.name} data-ai-hint="person" />
               <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
