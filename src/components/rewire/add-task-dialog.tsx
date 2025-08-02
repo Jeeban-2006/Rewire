@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import { Mic, Camera, Plus } from 'lucide-react';
+import { Plus } from 'lucide-react';
 
 interface AddTaskDialogProps {
   open: boolean;
@@ -24,7 +24,7 @@ export function AddTaskDialog({ open, onOpenChange }: AddTaskDialogProps) {
         <DialogHeader>
           <DialogTitle className="font-headline">Create New Task</DialogTitle>
           <DialogDescription>
-            Add a new task to your board. You can also add tasks using your voice or a photo.
+            Add a new task to your board.
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
@@ -35,16 +35,6 @@ export function AddTaskDialog({ open, onOpenChange }: AddTaskDialogProps) {
           <div className="grid gap-2">
             <Label htmlFor="description">Description (optional)</Label>
             <Textarea id="description" placeholder="Add more details about the task..." />
-          </div>
-          <div className="flex gap-2">
-            <Button variant="outline" className="flex-1">
-              <Mic className="mr-2 h-4 w-4" />
-              Add with Voice
-            </Button>
-            <Button variant="outline" className="flex-1">
-              <Camera className="mr-2 h-4 w-4" />
-              Add from Photo
-            </Button>
           </div>
         </div>
         <DialogFooter>
