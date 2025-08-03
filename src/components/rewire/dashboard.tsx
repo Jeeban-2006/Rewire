@@ -7,7 +7,6 @@ import type { Task, KanbanColumn, KanbanColumnId, User, Badge } from '@/types';
 import { mockTasks, mockUsers, mockBadges } from '@/lib/mock-data';
 import { Sidebar } from './sidebar';
 import { Header } from './header';
-import { KanbanBoard } from './kanban-board';
 import { TaskList } from './task-list';
 import { AddTaskDialog } from './add-task-dialog';
 import { EditTaskDialog } from './edit-task-dialog';
@@ -15,6 +14,9 @@ import { SettingsDialog } from './settings-dialog';
 import { useToast } from '@/hooks/use-toast';
 import type { DropResult } from 'react-beautiful-dnd';
 import { useAuth } from '@/lib/auth';
+import dynamic from 'next/dynamic';
+
+const KanbanBoard = dynamic(() => import('./kanban-board').then(mod => mod.KanbanBoard), { ssr: false });
 
 export function Dashboard() {
   const [tasks, setTasks] = useState<Task[]>([]);

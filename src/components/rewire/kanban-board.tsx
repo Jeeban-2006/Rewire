@@ -1,5 +1,4 @@
 
-import { useState, useEffect } from 'react';
 import type { KanbanColumn, KanbanColumnId, Task } from '@/types';
 import { TaskCard } from './task-card';
 import { DragDropContext, Droppable, Draggable, type DropResult } from 'react-beautiful-dnd';
@@ -13,21 +12,6 @@ interface KanbanBoardProps {
 }
 
 export function KanbanBoard({ columns, onEditTask, onDeleteTask, onMoveTask, onDragEnd }: KanbanBoardProps) {
-  // StrictMode-compliant drag and drop fix
-  const [enabled, setEnabled] = useState(false);
-  useEffect(() => {
-    const animation = requestAnimationFrame(() => setEnabled(true));
-    return () => {
-      cancelAnimationFrame(animation);
-      setEnabled(false);
-    };
-  }, []);
-
-  if (!enabled) {
-    return null;
-  }
-  // End of fix
-
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <div className="flex gap-6 p-4 lg:p-6 h-full overflow-x-auto">
