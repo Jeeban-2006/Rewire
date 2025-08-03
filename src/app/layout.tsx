@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster"
 import { ThemeProvider } from '@/components/rewire/theme-provider';
 import { AuthProvider } from '@/lib/auth';
 import { AnimatedBackground } from '@/components/rewire/animated-background';
+import { Footer } from '@/components/rewire/footer';
 
 export const metadata: Metadata = {
   title: 'Rewire',
@@ -23,7 +24,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=PT+Sans:wght@400;700&display=swap" rel="stylesheet" />
       </head>
-      <body className="font-body antialiased">
+      <body className="font-body antialiased flex flex-col min-h-screen">
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
@@ -32,7 +33,8 @@ export default function RootLayout({
         >
           <AuthProvider>
             <AnimatedBackground />
-            <main>{children}</main>
+            <main className="flex-grow">{children}</main>
+            <Footer />
           </AuthProvider>
           <Toaster />
         </ThemeProvider>
