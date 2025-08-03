@@ -11,7 +11,7 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { mockUsers } from '@/lib/mock-data';
-import { MoreVertical, GripVertical, Target, ArrowRight, Calendar } from 'lucide-react';
+import { MoreVertical, Target, ArrowRight, Calendar } from 'lucide-react';
 import { Button } from '../ui/button';
 import {
   DropdownMenu,
@@ -62,11 +62,10 @@ export function TaskCard({ task, onEdit, onDelete, onMove }: TaskCardProps) {
       <CardHeader className="p-4 flex flex-row items-start justify-between">
         <div className="space-y-1.5 flex-grow">
           <CardTitle className="text-base font-medium flex items-center">
-             <GripVertical className="h-5 w-5 mr-1 text-muted-foreground cursor-grab" />
             {task.title}
           </CardTitle>
           {task.description && (
-            <CardDescription className="text-xs ml-6">
+            <CardDescription className="text-xs">
               {task.description}
             </CardDescription>
           )}

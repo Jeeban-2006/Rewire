@@ -7,16 +7,13 @@ import type { Task, KanbanColumn, KanbanColumnId, User, Badge } from '@/types';
 import { mockTasks, mockUsers, mockBadges } from '@/lib/mock-data';
 import { Sidebar } from './sidebar';
 import { Header } from './header';
+import { KanbanBoard } from './kanban-board';
 import { TaskList } from './task-list';
 import { AddTaskDialog } from './add-task-dialog';
 import { EditTaskDialog } from './edit-task-dialog';
 import { SettingsDialog } from './settings-dialog';
 import { useToast } from '@/hooks/use-toast';
-import type { DropResult } from 'react-beautiful-dnd';
 import { useAuth } from '@/lib/auth';
-import dynamic from 'next/dynamic';
-
-const KanbanBoard = dynamic(() => import('./kanban-board').then(mod => mod.KanbanBoard), { ssr: false });
 
 export function Dashboard() {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -159,23 +156,6 @@ export function Dashboard() {
       );
     }
   };
-  
-  const handleDragEnd = (result: DropResult) => {
-    const { destination, source, draggableId } = result;
-
-    if (!destination) {
-      return;
-    }
-
-    if (
-      destination.droppableId === source.droppableId &&
-      destination.index === source.index
-    ) {
-      return;
-    }
-
-    handleMoveTask(draggableId, destination.droppableId as KanbanColumnId);
-  };
 
   const openEditDialog = (task: Task) => {
     setEditingTask(task);
@@ -289,7 +269,6 @@ export function Dashboard() {
               onEditTask={openEditDialog}
               onDeleteTask={handleDeleteTask}
               onMoveTask={handleMoveTask}
-              onDragEnd={handleDragEnd}
             />
           ) : (
             <TaskList
